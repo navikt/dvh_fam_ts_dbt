@@ -18,7 +18,8 @@ with ts_mottaker_data as (
     DIM_PERSON.STATSBORGERSKAP,
     DIM_PERSON.FODELAND,
     DIM_PERSON.SIVILSTATUS_KODE,
-    HENVISNING BEHANDLING_ID,ur.klassekode,
+    max(HENVISNING) BEHANDLING_ID,
+    ur.klassekode,
     SUM(CASE WHEN to_char(TID_FOM.DATO,'YYYYMM')= to_char(TID.DATO,'YYYYMM') THEN UR.BELOP ELSE 0 END)  TSOTILBARN,
     SUM(CASE WHEN to_char(TID_FOM.DATO,'YYYYMM')< to_char(TID.DATO,'YYYYMM') THEN UR.BELOP ELSE 0 END) TSOTILBARN_ETTERBETALT,
     --ts.endret_tid --melding.aktiviteter.type
@@ -94,7 +95,7 @@ with ts_mottaker_data as (
     DIM_PERSON.FODELAND,
     DIM_GEOGRAFI.BYDEL_NR,
     DIM_PERSON.SIVILSTATUS_KODE,
-    HENVISNING,ur.klassekode,
+    ur.klassekode,
     to_char(TID.DATO,'YYYYMM'),
     --ts.endret_tid --melding.aktiviteter.type
     --UR.LASTET_DATO, TID_FOM.DATO UTBET_FOM,TID_TOM.DATO UTBET_TOM,
@@ -145,7 +146,7 @@ from ts_mottaker_data
 
 {% if is_incremental() %}
 
-where periode > (select max(periode) from {{ this }})
+where periode >= (select max(periode) from {{ this }})
 
 {% endif %}
 
