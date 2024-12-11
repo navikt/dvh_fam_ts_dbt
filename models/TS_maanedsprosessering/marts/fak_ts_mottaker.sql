@@ -70,7 +70,7 @@ with ts_mottaker_data as (
     ) AKT ON
     akt.fk_ts_fagsak=fagsak.pk_ts_fagsak
 
-    LEFT OUTER JOIN {{ ref ('fak_ts_mottaker_barn') }} BARN ON
+    LEFT OUTER JOIN {{ ref ('ts_mottaker_barn') }} BARN ON
     UR.FK_PERSON1=BARN.FK_PERSON1
     AND to_char(TID.DATO,'YYYYMM')=BARN.PERIODE
 

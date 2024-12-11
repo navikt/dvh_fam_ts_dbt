@@ -5,7 +5,7 @@ with ts_mottaker_barn_data as (
   SUM(BU8) ANTBU8,
   SUM(BU10) ANTBU10,
   SUM(BU18) ANTBU18
-  FROM {{ ref('fak_ts_barn') }}
+  FROM {{ ref('ts_barn') }}
   GROUP BY PERIODE,FK_PERSON1
 )
 
