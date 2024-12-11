@@ -1,7 +1,7 @@
 dvh_fam_TS_dbt:
-  target: database
+  target: dev
   outputs:
-    database:
+    dev:
       type: oracle
       protocol: "tcp"
       user: "{{env_var('DBT_ORCL_USER_PROXY')}}"
