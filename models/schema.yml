@@ -54,6 +54,7 @@ sources:
         description: 'inneholder vedtaksinformasjon'
       - name: FAM_TS_BARN
         description: 'innholder informasjon om barna som kommer i vedtaket'
+      - name: fam_ts_ur_utbetaling
 
   - name: ur
     schema: dvh_ur
