@@ -1,67 +1,34 @@
 version: 2
 
 sources:
-  - name: arena_stonad
-    description: ''
-    schema: dt_p
-    tables:
-      - name: dim_f_stonad_omraade
-        description: 'inneholder infromasjon om stonader, som bl.a stonad_kode, stonad_navn osv'
-      - name: dim_maalgruppe_type
-        description: 'inneholder infromasjon om målgrupper, som bl.a maalgruppe_kode, maalgruppe_navn osv'
-      - name: fak_stonad
-        descripion: 'inneholder informasjon om stonad til brukere. inneholder fk_person1, postert_belop, aar, inntekt osv'
-      - name: dim_vedtak_postering
-        description: ''
-      - name: dim_kjonn
-        description: 'inneholder informasjon om kjonn mann, kvinne, ukjent'
-      - name: dim_alder
-        description: 'inneholder informasjon om alderen til brukere'
-      - name: dim_geografi
-        description: 'inneholder geografiske informasjon, bla fylke_navn, kommune_nr osv '
-      - name: dim_person
-        description: 'inneholder informasjon om brukere, bla kjonn, fodeland, statsborgerskap osv'
-      - name: dim_vilkaar_type
-        description: ''
-      - name: fak_arena_sak_vedtak
-        description: ''
-      - name: fak_vedtak_fakta
-        description: ''
-      - name: fak_vilkaar_vurdering
-        description: ''
-
-  - name: dt_person_arena
+  - name: dt_person
     schema: dt_person
     tables:
       - name: dim_person_kontaktinfo
-        description: 'inneholder informasjon om brukere, bla navn, telefon_mobil, k67_flagg osv, '
+        description: 'Inneholder informasjon om brukere, bla navn, telefon_mobil, k67_flagg osv, '
       - name: dvh_person_ident_off_id_ikke_skjermet
-        description: 'inneholder informasjon om personer som er ikke skjemet, bl.a fk_person1, off_id'
-      - name: DIM_PERSON
+        description: 'Inneholder informasjon om personer som er ikke skjemet, bl.a fk_person1, off_id'
+      - name: dim_person
 
-  - name: kode_verk
+  - name: dt_kodeverk
     schema: dt_kodeverk
     tables:
      - name: dim_alder
      - name: dim_tid
+     - name: dim_kjonn
+     - name: dim_geografi
 
   - name: fam_ef
     schema: dvh_fam_ef
     tables:
       - name: fam_ts_meta_data
-        description: 'inneholder meta_data for tilleggsstønader'
+        description: 'Inneholder meta_data for tilleggsstønader'
       - name: fam_ts_fagsak
         description: 'inneholder vedtaksinformasjon'
-      - name: FAM_TS_BARN
-        description: 'innholder informasjon om barna som kommer i vedtaket'
+      - name: fam_ts_barn
+        description: 'Inneholder informasjon om barna som kommer i vedtaket'
       - name: fam_ts_ur_utbetaling
-
-  - name: ur
-    schema: dvh_ur
-    tables:
-      - name: fak_ur_utbetaling
-        description: 'Et view som inneholder utbetalingers detaljier'
-      - name: DIM_KONTO_UR
+        description: 'Inneholder utbetalinger til TS område'
 
 
 

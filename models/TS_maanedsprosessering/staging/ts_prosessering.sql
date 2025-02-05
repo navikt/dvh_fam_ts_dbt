@@ -45,15 +45,14 @@ with ts_mottaker_data as (
     on ur.fk_dim_person = dim_person.pk_dim_person
     and dim_person.k67_flagg = 0
 
-    JOIN {{ source ('arena_stonad', 'dim_geografi') }} dim_geografi
+    JOIN {{ source ('dt_kodeverk', 'dim_geografi') }} dim_geografi
     on dim_person.fk_dim_geografi_bosted=dim_geografi.pk_dim_geografi
     
-    JOIN {{ source ('arena_stonad', 'dim_kjonn') }} dim_kjonn
+    JOIN {{ source ('dt_kodeverk', 'dim_kjonn') }} dim_kjonn
     on dim_person.fk_dim_kjonn=dim_kjonn.pk_dim_kjonn
 
     LEFT OUTER JOIN {{ ref ('ts_mottaker_barn') }} BARN ON
     UR.FK_PERSON1=BARN.FK_PERSON1
-    AND {{ var ('periode')}} = BARN.PERIODE
 
     where to_char(UR.POSTERINGSDATO,'YYYYMM') = {{ var ('periode')}}
     AND UR.KLASSEKODE IN ('TSTBASISP2-OP','TSTBASISP3-OP')
