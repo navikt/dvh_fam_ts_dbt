@@ -15,9 +15,9 @@ with ts_barn_data as (
     from {{ source ( 'fam_ef','fam_ts_ur_utbetaling' )}} UR
 
     JOIN {{ source ( 'dt_kodeverk','dim_tid' )}} TID
-    ON TID.dato = UR.posteringsdato
+    ON TID.aar_maaned = to_char(UR.posteringsdato, 'yyyymm')
     and tid.gyldig_flagg = 1
-    and tid.dim_nivaa = 1
+    and tid.dim_nivaa = 3
 
     JOIN {{ source ( 'fam_ef','fam_ts_barn' )}} BARN ON
     ur.henvisning = BARN.EKSTERN_BEHANDLING_ID
