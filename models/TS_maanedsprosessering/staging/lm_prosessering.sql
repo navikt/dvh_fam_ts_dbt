@@ -34,7 +34,7 @@ with lm_mottaker_data as (
     ) AKT ON
     akt.fk_ts_fagsak=fagsak.pk_ts_fagsak
 
-    JOIN {{ source ('dt_person', 'DIM_PERSON') }} dim_person
+    JOIN {{ source ('dt_person', 'dim_person') }} dim_person
     on ur.fk_dim_person = dim_person.pk_dim_person
     and dim_person.k67_flagg = 0
 

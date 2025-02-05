@@ -22,7 +22,7 @@ with ts_barn_data as (
     JOIN {{ source ( 'fam_ef','FAM_TS_BARN' )}} BARN ON
     ur.henvisning = BARN.EKSTERN_BEHANDLING_ID
 
-    LEFT OUTER JOIN {{ source ( 'dt_person','DIM_PERSON' )}} DIM_PERSON_BARN
+    LEFT OUTER JOIN {{ source ( 'dt_person','dim_person' )}} DIM_PERSON_BARN
     ON DIM_PERSON_BARN.FK_PERSON1 = BARN.FK_PERSON1
     AND TID.siste_dato_i_perioden BETWEEN DIM_PERSON_BARN.GYLDIG_FRA_DATO AND DIM_PERSON_BARN.GYLDIG_TIL_DATO
 
