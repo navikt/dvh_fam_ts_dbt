@@ -19,7 +19,7 @@ with ts_barn_data as (
     and tid.gyldig_flagg = 1
     and tid.dim_nivaa = 1
 
-    JOIN {{ source ( 'fam_ef','FAM_TS_BARN' )}} BARN ON
+    JOIN {{ source ( 'fam_ef','fam_ts_barn' )}} BARN ON
     ur.henvisning = BARN.EKSTERN_BEHANDLING_ID
 
     LEFT OUTER JOIN {{ source ( 'dt_person','dim_person' )}} DIM_PERSON_BARN
