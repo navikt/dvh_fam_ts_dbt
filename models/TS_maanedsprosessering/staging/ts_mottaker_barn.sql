@@ -4,7 +4,8 @@ with ts_mottaker_barn_data as (
   SUM(BU3) ANTBU3,
   SUM(BU8) ANTBU8,
   SUM(BU10) ANTBU10,
-  SUM(BU18) ANTBU18
+  SUM(BU18) ANTBU18,
+  MIN(ALDER_BARN) YBARN
   FROM {{ ref('ts_barn') }}
   GROUP BY PERIODE,FK_PERSON1
 )

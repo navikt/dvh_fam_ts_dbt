@@ -39,6 +39,7 @@ with mottaker_data as (
     ,ts.ANTBU10
     ,ts.ANTBU18
     ,localtimestamp AS lastet_dato 
+    ,ts.YBARN
   from 
     {{ ref('ts_prosessering') }} ts
 

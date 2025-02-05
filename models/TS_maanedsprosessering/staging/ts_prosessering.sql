@@ -25,7 +25,8 @@ with ts_mottaker_data as (
     BARN.ANTBU3,
     BARN.ANTBU8,
     BARN.ANTBU10,
-    BARN.ANTBU18
+    BARN.ANTBU18,
+    BARN.YBARN
     from {{ source ('fam_ef', 'fam_ts_ur_utbetaling') }} UR
 
     LEFT OUTER JOIN {{ source ('fam_ef', 'fam_ts_fagsak') }} FAGSAK ON
