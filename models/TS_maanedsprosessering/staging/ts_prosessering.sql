@@ -78,7 +78,8 @@ with ts_mottaker_data as (
     BARN.ANTBU3,
     BARN.ANTBU8,
     BARN.ANTBU10,
-    BARN.ANTBU18
+    BARN.ANTBU18,
+    BARn.YBARN
 )
 
 select
