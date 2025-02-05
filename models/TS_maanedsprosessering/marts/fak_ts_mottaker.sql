@@ -77,7 +77,8 @@ with mottaker_data as (
     ,ANTBU8
     ,ANTBU10
     ,ANTBU18
-    ,lastet_dato 
+    ,lastet_dato
+    ,YBARN 
   from mottaker_data
 
   {% if is_incremental() %}

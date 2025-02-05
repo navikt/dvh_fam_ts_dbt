@@ -109,4 +109,5 @@ select
   ,ANTBU10
   ,ANTBU18
   ,localtimestamp AS lastet_dato
+  ,YBARN
 from ts_mottaker_data
