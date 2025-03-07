@@ -29,6 +29,9 @@ sources:
         description: 'Inneholder informasjon om barna som kommer i vedtaket'
       - name: fam_ts_ur_utbetaling
         description: 'Inneholder utbetalinger til TS område'
-
+      - name: fam_ts_meta_data_v2
+        description: 'Inneholder meta_data for tilleggsstønader v2'
+      - name: fam_ts_fagsak_v2
+        description: 'inneholder vedtaksinformasjon v2'
 
 
