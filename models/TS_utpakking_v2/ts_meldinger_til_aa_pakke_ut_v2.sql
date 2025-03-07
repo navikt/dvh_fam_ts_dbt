@@ -9,16 +9,15 @@ with ts_meta_data as (
     FROM {{ source ('fam_ef', 'fam_ts_meta_data_v2') }} m,
         JSON_TABLE(
             m.melding,
-            '$.vedtaksperioder.lovverketsMålgruppe'
+            '$'
             COLUMNS(
-                type VARCHAR2(100) PATH '$'
+                type VARCHAR2(100) PATH '$.vedtaksperioder.lovverketsMålgruppe',
+                vedtak_resultat VARCHAR2(100) PATH '$.vedtak_resultat'
             )
         ) j
     WHERE j.type = 'ENSLIG_FORSØRGER'
-    AND endret_tid > nvl( (select max(endret_tid) from {{ source ('fam_ef', 'fam_ts_fagsak_v2') }}), endret_tid-1 )
-    --where opprettet_tid >= sysdate - 30 and ekstern_behandling_id not in (
-      --select ekstern_behandling_id from {{ source ('fam_ef', 'fam_ts_fagsak') }})
-        --and endret_tid <= (select max(endret_tid) from {{ this }})
+    OR j.vedtak_resultat = 'AVSLÅTT'
+    AND m.endret_tid > nvl( (select max(endret_tid) from {{ source ('fam_ef', 'fam_ts_fagsak_v2') }}), m.endret_tid-1 )
 )
 
 select meta.*
