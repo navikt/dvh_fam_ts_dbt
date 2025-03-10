@@ -18,7 +18,6 @@ select * from ts_meta_data,
       behandling_id                     VARCHAR2 PATH '$.behandling_id',
       fagsak_id                         VARCHAR2 PATH '$.fagsak_id',
       ekstern_fagsak_id                 VARCHAR2 PATH '$.ekstern_fagsak_id',
-      --ekstern_behandling_id             NUMBER PATH '$.ekstern_behandling_id',
       relatert_behandling_id            VARCHAR2 PATH '$.relatert_behandling_id',
       adressebeskyttelse                VARCHAR2 PATH '$.adressebeskyttelse',
       tidspunkt_vedtak                  VARCHAR2 PATH '$.tidspunkt_vedtak',
@@ -27,7 +26,6 @@ select * from ts_meta_data,
       behandling_arsak                  VARCHAR2 PATH '$.behandling_arsak',
       vedtak_resultat                   VARCHAR2 PATH '$.vedtak_resultat',
       stonadstype                       VARCHAR2 PATH '$.stonadstype'
-      --opprettet_tid                     VARCHAR2 PATH '$.opprettet_tid'
     )
   ) j
 ),

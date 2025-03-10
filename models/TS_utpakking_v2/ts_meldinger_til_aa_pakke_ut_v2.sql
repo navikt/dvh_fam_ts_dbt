@@ -15,8 +15,8 @@ with ts_meta_data as (
                 vedtak_resultat VARCHAR2(100) PATH '$.vedtak_resultat'
             )
         ) j
-    WHERE j.type = 'ENSLIG_FORSØRGER'
-    OR j.vedtak_resultat = 'AVSLÅTT'
+    WHERE (j.type = 'ENSLIG_FORSØRGER'
+    OR j.vedtak_resultat = 'AVSLÅTT')
     AND m.endret_tid > nvl( (select max(endret_tid) from {{ source ('fam_ef', 'fam_ts_fagsak_v2') }}), m.endret_tid-1 )
 )
 
