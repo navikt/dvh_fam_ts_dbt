@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: fak_ts
+    schema: dvh_fam_ef
+    tables:
+      - name: ts_barn
+        description: 'Inneholder månedlig informasjon av tilleggsstønader.'
+      - name: ts_mottaker_barn
+        description: 'Inneholder månedlig informasjon av tilleggsstønader.'
