@@ -24,7 +24,7 @@ select * from ts_meta_data,
           ,fra_og_med             DATE path '$.fom'
           ,lovverkets_maalgruppe  VARCHAR2 path '$.lovverketsMålgruppe'
           ,maalgruppe             VARCHAR2 path '$.målgruppe'
-          ,studentnivaa           VARCHAR2 path '$.studentnivå'
+          ,studienivaa            VARCHAR2 path '$.studentnivå'
           ,til_og_med             DATE path '$.tom'
       )
     )
@@ -39,7 +39,7 @@ final as (
       ,p.fra_og_med
       ,p.lovverkets_maalgruppe
       ,p.maalgruppe
-      ,p.studentnivaa
+      ,p.studienivaa
       ,p.til_og_med
       ,p.ekstern_behandling_id
       ,pk_ts_FAGSAK as FK_ts_FAGSAK
@@ -56,7 +56,7 @@ select
   ,fra_og_med
   ,lovverkets_maalgruppe
   ,maalgruppe
-  ,studentnivaa
+  ,studienivaa
   ,til_og_med
   ,ekstern_behandling_id
   ,localtimestamp AS LASTET_DATO
