@@ -34,5 +34,6 @@ sources:
       - name: fam_ts_fagsak_v2
         description: 'inneholder vedtaksinformasjon v2'
       - name: fam_ts_vedtaksperioder_v2
+      - name: fam_ts_barn_v2
 
 

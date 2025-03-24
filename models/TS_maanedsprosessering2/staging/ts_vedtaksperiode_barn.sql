@@ -22,32 +22,6 @@ tid as (
 )
 ,
 
---Per periode: alder på yngste barn og antall barn for hver aldersgruppe
-periode_barn as (
-    select
-        fk_ts_vedtaksperioder
-       ,min(floor(months_between(tid.siste_dato_i_perioden, dim_person_barn.fodt_dato)/12)) ybarn
-       ,sum(case when floor(months_between(tid.siste_dato_i_perioden, dim_person_barn.fodt_dato)/12) < 1 then 1 else 0 end) antbu1
-       ,sum(case when floor(months_between(tid.siste_dato_i_perioden, dim_person_barn.fodt_dato)/12) < 3 then 1 else 0 end) antbu3
-       ,sum(case when floor(months_between(tid.siste_dato_i_perioden, dim_person_barn.fodt_dato)/12) < 8 then 1 else 0 end) antbu8
-       ,sum(case when floor(months_between(tid.siste_dato_i_perioden, dim_person_barn.fodt_dato)/12) < 10 then 1 else 0 end) antbu10
-       ,sum(case when floor(months_between(tid.siste_dato_i_perioden, dim_person_barn.fodt_dato)/12) < 18 then 1 else 0 end) antbu18
-    from fam_ts_barn_v2 barn
-    
-    join ur
-    on ur.henvisning = barn.ekstern_behandling_id
-    
-    join tid
-    on tid.aar_maaned = ur.periode
-
-    join dt_person.dim_person dim_person_barn
-    on dim_person_barn.fk_person1 = barn.fk_person1
-    and tid.siste_dato_i_perioden between dim_person_barn.gyldig_fra_dato and dim_person_barn.gyldig_til_dato
-    
-    group by barn.fk_ts_vedtaksperioder
-)
-,
-
 --Alle rader fra gjeldende ur og legg til vedtaks infomasjon
 ur_vedtaksperiode as (
     select
@@ -61,25 +35,47 @@ ur_vedtaksperiode as (
        ,ur.belop
        ,ur.periode
        ,tid.siste_dato_i_perioden
-       ,periode_barn.ybarn
-       ,periode_barn.antbu1
-       ,periode_barn.antbu3
-       ,periode_barn.antbu8
-       ,periode_barn.antbu10
-       ,periode_barn.antbu18
+       ,periode_barn.fk_person1_barn
+       ,dim_person_barn.pk_dim_person as fk_dim_person_barn
+       ,floor(months_between(tid.siste_dato_i_perioden, dim_person_barn.fodt_dato)/12) alder_barn
 
     from ur
 
     join tid
     on tid.aar_maaned = ur.periode
 
-    left join {{ source('fam_ef','fam_ts_vedtaksperioder_v2') }} periode
-    on ur.henvisning = periode.ekstern_behandling_id
-    and ur.dato_utbet_fom between periode.fra_og_med and periode.til_og_med
+    --Periode med alle barn fra perioden
+    left join
+    (
+        select
+            periode.ekstern_behandling_id
+           ,periode.aktivitet
+           ,periode.antall_barn
+           ,periode.fra_og_med
+           ,periode.til_og_med
+           ,periode.lovverkets_maalgruppe
+           ,periode.maalgruppe
+           ,periode.studienivaa
+           ,barn.fk_person1 as fk_person1_barn
+        from {{ source('fam_ef','fam_ts_vedtaksperioder_v2') }} periode
 
-    left join periode_barn
-    on periode_barn.fk_ts_vedtaksperioder = periode.pk_ts_vedtaksperioder
+        left join {{ source('fam_ef','fam_ts_barn_v2') }} barn
+        on barn.fk_ts_vedtaksperioder = periode.pk_ts_vedtaksperioder
+    ) periode_barn
+    on ur.henvisning = periode_barn.ekstern_behandling_id
+    and ur.dato_utbet_fom between periode_barn.fra_og_med and periode_barn.til_og_med
+
+    left join dt_person.dim_person dim_person_barn
+    on dim_person_barn.fk_person1 = periode_barn.fk_person1_barn
+    and tid.siste_dato_i_perioden between dim_person_barn.gyldig_fra_dato and dim_person_barn.gyldig_til_dato
+    and dim_person_barn.skjermet_kode = 0 --Filtrer vekk kode67    
 )
 
-select *
-from ur_vedtaksperiode
+select 
+    a.*
+   ,case when alder_barn < 1 then 1 else 0 end bu1
+   ,case when alder_barn < 3 then 1 else 0 end bu3
+   ,case when alder_barn < 8 then 1 else 0 end bu8
+   ,case when alder_barn < 10 then 1 else 0 end bu10
+   ,case when alder_barn < 18 then 1 else 0 end bu18
+from ur_vedtaksperiode a
