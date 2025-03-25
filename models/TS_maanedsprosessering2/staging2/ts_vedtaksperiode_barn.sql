@@ -32,9 +32,13 @@ ur_vedtaksperiode as (
        ,ur.henvisning
        ,ur.dato_utbet_fom
        ,ur.dato_utbet_tom
-       ,ur.belop
        ,ur.periode
        ,tid.siste_dato_i_perioden
+       ,periode_barn.ekstern_behandling_id
+       ,periode_barn.fra_og_med
+       ,periode_barn.til_og_med
+       ,periode_barn.fk_ts_vedtaksperioder
+       ,periode_barn.fk_ts_barn
        ,periode_barn.fk_person1_barn
        ,dim_person_barn.pk_dim_person as fk_dim_person_barn
        ,floor(months_between(tid.siste_dato_i_perioden, dim_person_barn.fodt_dato)/12) alder_barn
@@ -49,13 +53,10 @@ ur_vedtaksperiode as (
     (
         select
             periode.ekstern_behandling_id
-           ,periode.aktivitet
-           ,periode.antall_barn
            ,periode.fra_og_med
            ,periode.til_og_med
-           ,periode.lovverkets_maalgruppe
-           ,periode.maalgruppe
-           ,periode.studienivaa
+           ,periode.pk_ts_vedtaksperioder as fk_ts_vedtaksperioder
+           ,barn.pk_ts_barn as fk_ts_barn
            ,barn.fk_person1 as fk_person1_barn
         from {{ source('fam_ef','fam_ts_vedtaksperioder_v2') }} periode
 
@@ -65,7 +66,7 @@ ur_vedtaksperiode as (
     on ur.henvisning = periode_barn.ekstern_behandling_id
     and ur.dato_utbet_fom between periode_barn.fra_og_med and periode_barn.til_og_med
 
-    left join dt_person.dim_person dim_person_barn
+    left join {{ source('dt_person','dim_person') }} dim_person_barn
     on dim_person_barn.fk_person1 = periode_barn.fk_person1_barn
     and tid.siste_dato_i_perioden between dim_person_barn.gyldig_fra_dato and dim_person_barn.gyldig_til_dato
     and dim_person_barn.skjermet_kode = 0 --Filtrer vekk kode67    

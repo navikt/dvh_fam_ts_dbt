@@ -1,0 +1,6 @@
+version: 2
+
+models:
+  - name: ts_vedtaksperiode_barn
+
+  - name: ts_vedtaksperiode_mottaker
