@@ -44,6 +44,7 @@ ur_vedtaksperiode as (
        ,periode.maalgruppe
        ,periode.studienivaa
        ,periode.fk_ts_fagsak
+       ,periode.fk_ts_vedtaksperioder
        ,dim_person.bosted_kommune_nr
        ,dim_geografi.pk_dim_geografi as fk_dim_geografi
        ,dim_geografi.bydel_kommune_nr       
