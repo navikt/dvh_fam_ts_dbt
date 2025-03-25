@@ -35,11 +35,11 @@ with fakta as (
        ,mottaker.fk_dim_kjonn
        ,mottaker.kjonn_kode
        ,barn.ybarn
-       ,antbu1
-       ,antbu3
-       ,antbu8
-       ,antbu10
-       ,antbu18
+       ,barn.antbu1
+       ,barn.antbu3
+       ,barn.antbu8
+       ,barn.antbu10
+       ,barn.antbu18
        ,fagsak.fagsak_id
        ,fagsak.fk_ts_meta_data
        ,fagsak.behandling_id
@@ -55,7 +55,7 @@ with fakta as (
        ,opphor.aarsak as opphor_aarsak
     from {{ ref('ts_vedtaksperiode_mottaker_test') }} mottaker
 
-    --Periode med alle barn fra perioden
+    --Informasjon om barn og summere opp til en linje per periode
     left join
     (
         select fk_ts_vedtaksperioder, ekstern_behandling_id
@@ -74,6 +74,7 @@ with fakta as (
     left join {{ source('fam_ef','fam_ts_fagsak_v2') }} fagsak
     on mottaker.fk_ts_fagsak = fagsak.pk_ts_fagsak
 
+    --Legge til informasjon om avslag om det finnes, og returnere kun en linje. Tar maks foreløpig.
     left join
     (
         select fk_ts_fagsak, max(aarsak) aarsak
@@ -81,7 +82,8 @@ with fakta as (
         group by fk_ts_fagsak
     ) avslag
     on mottaker.fk_ts_fagsak = avslag.fk_ts_fagsak
-
+    
+    --Legge til informasjon om opphør om det finnes, og returnere kun en linje. Tar maks foreløpig.
     left join
     (
         select fk_ts_fagsak, max(aarsak) aarsak
@@ -90,41 +92,65 @@ with fakta as (
     ) opphor
     on mottaker.fk_ts_fagsak = opphor.fk_ts_fagsak
 )
+,
 
-select
-    periode
-   ,fk_person1 --Mottaker
-   ,fk_dim_person --Mottaker
-   ,pk_ur_utbetaling
-   ,klassekode
-   ,henvisning
-   ,dato_utbet_fom
-   ,dato_utbet_tom
-   ,belop
-   ,siste_dato_i_perioden
-   ,fk_ts_fagsak
-   ,ekstern_behandling_id
-   ,aktivitet
-   ,antall_barn
-   ,fra_og_med
-   ,til_og_med
-   ,lovverkets_maalgruppe
-   ,maalgruppe
-   ,studienivaa
-   ,fk_ts_vedtaksperioder
-   ,ybarn
-   ,antbu1
-   ,antbu3
-   ,antbu8
-   ,antbu10
-   ,antbu18
-   ,fagsak_id
-   ,bosted_kommune_nr
-   ,fk_dim_geografi
-   ,bydel_kommune_nr       
-   ,statsborgerskap
-   ,fodeland
-   ,sivilstatus_kode
-   ,fk_dim_kjonn
-   ,kjonn_kode
-from fakta
+--Return en linje per mottaker
+fakta_per_mottaker as (
+    select
+        periode
+       ,fk_person1 --Mottaker
+       ,fk_dim_person --Mottaker
+       ,siste_dato_i_perioden
+       ,bosted_kommune_nr
+       ,fk_dim_geografi
+       ,bydel_kommune_nr       
+       ,statsborgerskap
+       ,fodeland
+       ,sivilstatus_kode
+       ,fk_dim_kjonn
+       ,kjonn_kode
+       ,fodsels_aar
+       ,fodsels_mnd
+       ,alder
+
+       ,max(case when stonadstype = 'BARNETILSYN' then ekstern_behandling_id end) bt_ekstern_behandling_id
+       ,max(case when stonadstype = 'LÆREMIDLER' then ekstern_behandling_id end) lm_ekstern_behandling_id
+
+       ,max(case when stonadstype = 'BARNETILSYN' then fagsak_id end) bt_fagsak_id
+       ,max(case when stonadstype = 'LÆREMIDLER' then fagsak_id end) lm_fagsak_id
+
+       ,sum(case when stonadstype = 'BARNETILSYN' and to_char(dato_utbet_fom, 'yyyymm') = periode then belop end) tsotilbarn
+       ,sum(case when stonadstype = 'BARNETILSYN' and to_char(dato_utbet_fom, 'yyyymm') < periode then belop end) tsotilbarn_etterbetalt
+
+       ,sum(case when stonadstype = 'LÆREMIDLER' and to_char(dato_utbet_fom, 'yyyymm') = periode then belop end) tsolmidler
+       ,sum(case when stonadstype = 'LÆREMIDLER' and to_char(dato_utbet_fom, 'yyyymm') < periode then belop end) tsolmidler_etterbetalt
+
+       ,sum(belop) total_belop
+       ,max(aktivitet) aaktivitet
+       ,max(antall_barn) antall_barn
+       ,max(lovverkets_maalgruppe) lovverkets_maalgruppe
+       ,max(maalgruppe) maalgruppe
+       ,max(studienivaa) studienivaa
+       ,max(avslag_aarsak) avslag_aarsak
+       ,max(opphor_aarsak) opphor_aarsak 
+    from fakta
+    group by
+        periode
+       ,fk_person1 --Mottaker
+       ,fk_dim_person --Mottaker
+       ,siste_dato_i_perioden
+       ,bosted_kommune_nr
+       ,fk_dim_geografi
+       ,bydel_kommune_nr       
+       ,statsborgerskap
+       ,fodeland
+       ,sivilstatus_kode
+       ,fk_dim_kjonn
+       ,kjonn_kode
+       ,fodsels_aar
+       ,fodsels_mnd
+       ,alder
+)
+
+select *
+from fakta_per_mottaker

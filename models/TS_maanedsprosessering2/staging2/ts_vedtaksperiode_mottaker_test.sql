@@ -53,7 +53,9 @@ ur_vedtaksperiode as (
        ,dim_person.sivilstatus_kode
        ,dim_person.fk_dim_kjonn
        ,dim_kjonn.kjonn_kode
-
+       ,floor(months_between(tid.siste_dato_i_perioden, dim_person.fodt_dato)/12) alder
+       ,to_char(dim_person.fodt_dato,'yyyy') as fodsels_aar
+       ,to_char(dim_person.fodt_dato,'mm') as fodsels_mnd
     from ur
 
     join tid
