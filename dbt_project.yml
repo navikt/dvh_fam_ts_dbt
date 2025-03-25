@@ -38,3 +38,7 @@ models:
     # Config indicated by + and applies to all files under models/example/
     marts:
       +materialized: view
+
+vars:
+  # Input statistikk periode for månedsprosessering
+  periode:
