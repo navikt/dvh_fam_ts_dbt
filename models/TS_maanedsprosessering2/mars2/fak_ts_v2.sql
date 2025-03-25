@@ -39,7 +39,7 @@ with fakta as (
        ,antbu3
        ,antbu8
        ,antbu10
-       ,antubu18
+       ,antbu18
        ,fagsak.fagsak_id
        ,fagsak.fk_ts_meta_data
        ,fagsak.behandling_id
@@ -58,7 +58,7 @@ with fakta as (
     --Periode med alle barn fra perioden
     left join
     (
-        select fk_ts_vedtaksperioder
+        select fk_ts_vedtaksperioder, ekstern_behandling_id
               ,sum(bu1) antbu1
               ,sum(bu3) antbu3
               ,sum(bu8) antbu8
@@ -66,7 +66,7 @@ with fakta as (
               ,sum(bu18) antbu18
               ,min(alder_barn) ybarn
         from {{ ref('ts_vedtaksperiode_barn_test') }}
-        group by fk_ts_vedtaksperioder
+        group by fk_ts_vedtaksperioder, ekstern_behandling_id
     ) barn
     on mottaker.ekstern_behandling_id = barn.ekstern_behandling_id
     and mottaker.fk_ts_vedtaksperioder = barn.fk_ts_vedtaksperioder
@@ -117,8 +117,8 @@ select
    ,antbu3
    ,antbu8
    ,antbu10
-   ,antubu18
-   ,fagsak.fagsak_id
+   ,antbu18
+   ,fagsak_id
    ,bosted_kommune_nr
    ,fk_dim_geografi
    ,bydel_kommune_nr       
