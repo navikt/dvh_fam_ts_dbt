@@ -34,6 +34,9 @@ with fakta as (
        ,mottaker.sivilstatus_kode
        ,mottaker.fk_dim_kjonn
        ,mottaker.kjonn_kode
+       ,mottaker.alder
+       ,mottaker.fodsels_aar
+       ,mottaker.fodsels_mnd
        ,barn.ybarn
        ,barn.antbu1
        ,barn.antbu3
