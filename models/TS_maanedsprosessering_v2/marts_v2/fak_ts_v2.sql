@@ -4,11 +4,12 @@
     )
 }}
 
+-- Hent fakta om mottakere og deres vedtaksperioder
 with fakta as (
     select
         mottaker.pk_ur_utbetaling
-       ,mottaker.fk_person1 --Mottaker
-       ,mottaker.fk_dim_person --Mottaker
+       ,mottaker.fk_person1 -- Mottaker
+       ,mottaker.fk_dim_person -- Mottaker
        ,mottaker.klassekode
        ,mottaker.henvisning
        ,mottaker.dato_utbet_fom
@@ -56,9 +57,9 @@ with fakta as (
        ,fagsak.stonadstype
        ,avslag.aarsak as avslag_aarsak
        ,opphor.aarsak as opphor_aarsak
-    from {{ ref('ts_vedtaksperiode_mottaker_test') }} mottaker
+    from {{ ref('ts_vedtaksperiode_mottaker_v2') }} mottaker
 
-    --Informasjon om barn og summere opp til en linje per periode
+    -- Informasjon om barn og summere opp til en linje per periode
     left join
     (
         select fk_ts_vedtaksperioder, ekstern_behandling_id
@@ -68,16 +69,17 @@ with fakta as (
               ,sum(bu10) antbu10
               ,sum(bu18) antbu18
               ,min(alder_barn) ybarn
-        from {{ ref('ts_vedtaksperiode_barn_test') }}
+        from {{ ref('ts_vedtaksperiode_barn_v2') }}
         group by fk_ts_vedtaksperioder, ekstern_behandling_id
     ) barn
     on mottaker.ekstern_behandling_id = barn.ekstern_behandling_id
     and mottaker.fk_ts_vedtaksperioder = barn.fk_ts_vedtaksperioder
 
+    -- Legg til informasjon om fagsak
     left join {{ source('fam_ef','fam_ts_fagsak_v2') }} fagsak
     on mottaker.fk_ts_fagsak = fagsak.pk_ts_fagsak
 
-    --Legge til informasjon om avslag om det finnes, og returnere kun en linje. Tar maks foreløpig.
+    -- Legge til informasjon om avslag om det finnes, og returnere kun en linje. Tar maks foreløpig.
     left join
     (
         select fk_ts_fagsak, max(aarsak) aarsak
@@ -86,7 +88,7 @@ with fakta as (
     ) avslag
     on mottaker.fk_ts_fagsak = avslag.fk_ts_fagsak
     
-    --Legge til informasjon om opphør om det finnes, og returnere kun en linje. Tar maks foreløpig.
+    -- Legge til informasjon om opphør om det finnes, og returnere kun en linje. Tar maks foreløpig.
     left join
     (
         select fk_ts_fagsak, max(aarsak) aarsak
@@ -97,12 +99,12 @@ with fakta as (
 )
 ,
 
---Return en linje per mottaker
+-- Return en linje per mottaker
 fakta_per_mottaker as (
     select
         periode
-       ,fk_person1 --Mottaker
-       ,fk_dim_person --Mottaker
+       ,fk_person1 -- Mottaker
+       ,fk_dim_person -- Mottaker
        ,siste_dato_i_perioden
        ,bosted_kommune_nr
        ,fk_dim_geografi
@@ -139,8 +141,8 @@ fakta_per_mottaker as (
     from fakta
     group by
         periode
-       ,fk_person1 --Mottaker
-       ,fk_dim_person --Mottaker
+       ,fk_person1 -- Mottaker
+       ,fk_dim_person -- Mottaker
        ,siste_dato_i_perioden
        ,bosted_kommune_nr
        ,fk_dim_geografi
@@ -155,5 +157,6 @@ fakta_per_mottaker as (
        ,alder
 )
 
+-- Velg alle kolonner fra fakta_per_mottaker
 select *
 from fakta_per_mottaker
