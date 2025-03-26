@@ -138,6 +138,12 @@ fakta_per_mottaker as (
        ,max(studienivaa) studienivaa
        ,max(avslag_aarsak) avslag_aarsak
        ,max(opphor_aarsak) opphor_aarsak 
+       ,max(ybarn) ybarn
+       ,max(antbu1) antbu1
+       ,max(antbu3) antbu3
+       ,max(antbu8) antbu8
+       ,max(antbu10) antbu10
+       ,max(antbu18) antbu18
     from fakta
     group by
         periode
