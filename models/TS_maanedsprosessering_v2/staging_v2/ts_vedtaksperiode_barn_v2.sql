@@ -4,7 +4,7 @@
     )
 }}
 
--- Hent ut ur data for input statistikk periode
+-- Return alle stønadstyper per mottaker, per periode. Og en linje(ekstern_behandling_id) per stønadstype.
 with mottaker as (
     select  
         periode
@@ -29,7 +29,7 @@ with mottaker as (
 )
 ,
 
--- Alle rader fra gjeldende ur og legg til vedtaksinformasjon
+-- Hent ut alle barn for aktuell periode
 barn_vedtaksperiode as (
     select
         mottaker.periode
@@ -59,7 +59,7 @@ barn_vedtaksperiode as (
     and dim_person_barn.skjermet_kode = 0 -- Filtrer vekk kode67    
 )
 
--- Velg alle kolonner fra barn_vedtaksperiode og beregn aldersgrupper for barn
+-- Beregn aldersgrupper for barn i tillegg
 select 
     a.*
    ,case when alder_barn < 1 then 1 else 0 end bu1

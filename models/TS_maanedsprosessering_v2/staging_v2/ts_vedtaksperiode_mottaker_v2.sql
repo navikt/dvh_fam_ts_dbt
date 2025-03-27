@@ -97,6 +97,5 @@ ur_vedtaksperiode as (
     on dim_kjonn.pk_dim_kjonn = dim_person.fk_dim_kjonn
 )
 
--- Velg alle kolonner fra ur_vedtaksperiode
 select *
 from ur_vedtaksperiode

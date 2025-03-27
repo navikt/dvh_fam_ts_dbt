@@ -18,7 +18,7 @@ with fakta as (
        ,opphor.aarsak as opphor_aarsak
     from {{ ref('ts_vedtaksperiode_mottaker_v2') }} mottaker
 
-    -- Hent ut informasjon om barn for alle typer stønader, en line per fk_ts_vedtaksperioder
+    -- Hent ut informasjon om barn for alle typer stønader, og en line per fk_ts_vedtaksperioder
     left join
     (
         select fk_ts_vedtaksperioder
@@ -55,7 +55,7 @@ with fakta as (
 )
 ,
 
--- Return en linje per mottaker
+-- Return en linje per mottaker, per periode
 fakta_per_mottaker as (
     select
         periode
