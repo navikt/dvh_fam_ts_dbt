@@ -77,7 +77,7 @@ ur_vedtaksperiode as (
     left join {{ source('fam_ef','fam_ts_fagsak_v2') }} fagsak
     on ur.henvisning = fagsak.ekstern_behandling_id
 
-    -- Legg til vedtaksinformasjon
+    -- Legg til informasjon om vedtaksperiode
     left join {{ source('fam_ef','fam_ts_vedtaksperioder_v2') }} periode
     on ur.henvisning = periode.ekstern_behandling_id
     and ur.dato_utbet_fom between periode.fra_og_med and periode.til_og_med
