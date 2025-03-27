@@ -12,8 +12,6 @@ with mottaker as (
        ,fk_dim_person -- Mottaker
        ,ekstern_behandling_id
        ,fk_ts_vedtaksperioder
-       ,dato_utbet_fom
-       ,dato_utbet_tom
        ,fra_og_med
        ,til_og_med
        ,siste_dato_i_perioden
@@ -25,8 +23,6 @@ with mottaker as (
        ,fk_dim_person -- Mottaker
        ,ekstern_behandling_id
        ,fk_ts_vedtaksperioder
-       ,dato_utbet_fom
-       ,dato_utbet_tom
        ,fra_og_med
        ,til_og_med
        ,siste_dato_i_perioden
@@ -41,8 +37,6 @@ barn_vedtaksperiode as (
        ,mottaker.fk_dim_person -- Mottaker
        ,mottaker.ekstern_behandling_id
        ,mottaker.fk_ts_vedtaksperioder
-       ,mottaker.dato_utbet_fom
-       ,mottaker.dato_utbet_tom
        ,mottaker.fra_og_med
        ,mottaker.til_og_med
        ,mottaker.klassekode
