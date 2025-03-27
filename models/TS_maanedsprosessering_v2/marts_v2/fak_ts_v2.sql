@@ -70,7 +70,7 @@ with fakta as (
               ,sum(bu8) antbu8
               ,sum(bu10) antbu10
               ,sum(bu18) antbu18
-        from {{ ref('ts_vedtaksperiode_barn_v2_copy') }}
+        from {{ ref('ts_vedtaksperiode_barn_v2') }}
         group by fk_ts_vedtaksperioder, ekstern_behandling_id
     ) barn
     on mottaker.ekstern_behandling_id = barn.ekstern_behandling_id

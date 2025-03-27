@@ -6,33 +6,40 @@
 
 -- Hent ut ur data for input statistikk periode
 with mottaker as (
-    select *
+    select  
+        periode
+       ,fk_person1 -- Mottaker
+       ,fk_dim_person -- Mottaker
+       ,ekstern_behandling_id
+       ,fk_ts_vedtaksperioder
+       ,fra_og_med
+       ,til_og_med
+       ,siste_dato_i_perioden
+       ,max(klassekode) klassekode --Ta maks i tilfelle det er flere ulike klassekoder av en stønadstype fra UR
     from {{ ref('ts_vedtaksperiode_mottaker_v2')}}
+    group by
+        periode
+       ,fk_person1 -- Mottaker
+       ,fk_dim_person -- Mottaker
+       ,ekstern_behandling_id
+       ,fk_ts_vedtaksperioder
+       ,fra_og_med
+       ,til_og_med
+       ,siste_dato_i_perioden
 )
 ,
 
 -- Alle rader fra gjeldende ur og legg til vedtaksinformasjon
 barn_vedtaksperiode as (
     select
-        mottaker.pk_ur_utbetaling
+        mottaker.periode
        ,mottaker.fk_person1 -- Mottaker
        ,mottaker.fk_dim_person -- Mottaker
-       ,mottaker.klassekode
-       ,mottaker.henvisning
-       ,mottaker.dato_utbet_fom
-       ,mottaker.dato_utbet_tom
-       ,mottaker.periode
-       ,mottaker.siste_dato_i_perioden
        ,mottaker.ekstern_behandling_id
-       ,mottaker.aktivitet
-       ,mottaker.antall_barn
+       ,mottaker.fk_ts_vedtaksperioder
        ,mottaker.fra_og_med
        ,mottaker.til_og_med
-       ,mottaker.lovverkets_maalgruppe
-       ,mottaker.maalgruppe
-       ,mottaker.studienivaa
-       ,mottaker.fk_ts_fagsak
-       ,mottaker.fk_ts_vedtaksperioder
+       ,mottaker.klassekode
        ,barn.pk_ts_barn as fk_ts_barn
        ,barn.fk_person1 as fk_person1_barn
        ,dim_person_barn.pk_dim_person as fk_dim_person_barn
