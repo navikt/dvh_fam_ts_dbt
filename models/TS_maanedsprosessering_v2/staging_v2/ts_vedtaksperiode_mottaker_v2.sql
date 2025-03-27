@@ -36,7 +36,18 @@ ur_vedtaksperiode as (
        ,ur.belop
        ,ur.periode
        ,tid.siste_dato_i_perioden
-       ,periode.ekstern_behandling_id
+       ,fagsak.fagsak_id
+       ,fagsak.fk_ts_meta_data
+       ,fagsak.behandling_id
+       ,fagsak.ekstern_fagsak_id
+       ,fagsak.relatert_behandling_id
+       ,fagsak.ekstern_behandling_id
+       ,fagsak.adressebeskyttelse
+       ,fagsak.tidspunkt_vedtak
+       ,fagsak.behandling_type
+       ,fagsak.behandling_arsak
+       ,fagsak.vedtak_resultat
+       ,fagsak.stonadstype
        ,periode.aktivitet
        ,periode.antall_barn
        ,periode.fra_og_med
@@ -61,6 +72,10 @@ ur_vedtaksperiode as (
 
     join tid
     on tid.aar_maaned = ur.periode
+
+    -- Legg til informasjon om fagsak
+    left join {{ source('fam_ef','fam_ts_fagsak_v2') }} fagsak
+    on ur.henvisning = fagsak.ekstern_behandling_id
 
     -- Legg til vedtaksinformasjon
     left join {{ source('fam_ef','fam_ts_vedtaksperioder_v2') }} periode

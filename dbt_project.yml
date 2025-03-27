@@ -41,4 +41,4 @@ models:
 
 vars:
   # Input statistikk periode for månedsprosessering
-  periode:
+  periode: 202501
