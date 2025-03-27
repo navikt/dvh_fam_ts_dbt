@@ -59,17 +59,18 @@ with fakta as (
        ,opphor.aarsak as opphor_aarsak
     from {{ ref('ts_vedtaksperiode_mottaker_v2') }} mottaker
 
-    -- Informasjon om barn og summere opp til en linje per periode
+    -- Hent ut informasjon om barn for alle typer stønader, en line per fk_ts_vedtaksperioder
     left join
     (
-        select fk_ts_vedtaksperioder, ekstern_behandling_id
+        select fk_ts_vedtaksperioder
+              ,ekstern_behandling_id
+              ,min(alder_barn) ybarn
               ,sum(bu1) antbu1
               ,sum(bu3) antbu3
               ,sum(bu8) antbu8
               ,sum(bu10) antbu10
               ,sum(bu18) antbu18
-              ,min(alder_barn) ybarn
-        from {{ ref('ts_vedtaksperiode_barn_v2') }}
+        from {{ ref('ts_vedtaksperiode_barn_v2_copy') }}
         group by fk_ts_vedtaksperioder, ekstern_behandling_id
     ) barn
     on mottaker.ekstern_behandling_id = barn.ekstern_behandling_id
@@ -138,6 +139,8 @@ fakta_per_mottaker as (
        ,max(studienivaa) studienivaa
        ,max(avslag_aarsak) avslag_aarsak
        ,max(opphor_aarsak) opphor_aarsak 
+
+       -- Return informasjon om barn så lenge det finnes i en av stønader
        ,max(ybarn) ybarn
        ,max(antbu1) antbu1
        ,max(antbu3) antbu3

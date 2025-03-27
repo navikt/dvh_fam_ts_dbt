@@ -10,29 +10,42 @@ with mottaker as (
         periode
        ,fk_person1 -- Mottaker
        ,fk_dim_person -- Mottaker
-       ,siste_dato_i_perioden
        ,ekstern_behandling_id
-       ,FK_TS_VEDTAKSPERIODER
+       ,fk_ts_vedtaksperioder
+       ,dato_utbet_fom
+       ,dato_utbet_tom
+       ,fra_og_med
+       ,til_og_med
+       ,siste_dato_i_perioden
+       ,max(klassekode) klassekode --Ta maks i tilfelle det er flere ulike klassekoder av en stønadstype fra UR
     from {{ ref('ts_vedtaksperiode_mottaker_v2')}}
     group by
         periode
        ,fk_person1 -- Mottaker
        ,fk_dim_person -- Mottaker
-       ,siste_dato_i_perioden
        ,ekstern_behandling_id
-       ,FK_TS_VEDTAKSPERIODER
+       ,fk_ts_vedtaksperioder
+       ,dato_utbet_fom
+       ,dato_utbet_tom
+       ,fra_og_med
+       ,til_og_med
+       ,siste_dato_i_perioden
 )
 ,
 
 -- Alle rader fra gjeldende ur og legg til vedtaksinformasjon
 barn_vedtaksperiode as (
     select
-       mottaker.fk_person1 -- Mottaker
+        mottaker.periode
+       ,mottaker.fk_person1 -- Mottaker
        ,mottaker.fk_dim_person -- Mottaker
-       ,mottaker.periode
-       ,mottaker.siste_dato_i_perioden
        ,mottaker.ekstern_behandling_id
        ,mottaker.fk_ts_vedtaksperioder
+       ,mottaker.dato_utbet_fom
+       ,mottaker.dato_utbet_tom
+       ,mottaker.fra_og_med
+       ,mottaker.til_og_med
+       ,mottaker.klassekode
        ,barn.pk_ts_barn as fk_ts_barn
        ,barn.fk_person1 as fk_person1_barn
        ,dim_person_barn.pk_dim_person as fk_dim_person_barn
