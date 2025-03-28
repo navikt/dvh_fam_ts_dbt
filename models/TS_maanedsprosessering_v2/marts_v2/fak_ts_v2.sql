@@ -107,6 +107,7 @@ fakta_per_mottaker as (
     from fakta
     group by
         periode
+       ,gyldig_flagg
        ,fk_person1 -- Mottaker
        ,fk_dim_person -- Mottaker
        ,siste_dato_i_perioden
