@@ -33,5 +33,9 @@ sources:
         description: 'Inneholder meta_data for tilleggsstønader v2'
       - name: fam_ts_fagsak_v2
         description: 'inneholder vedtaksinformasjon v2'
+      - name: fam_ts_vedtaksperioder_v2
+      - name: fam_ts_barn_v2
+      - name: fam_ts_arsaker_avslag_v2
+      - name: fam_ts_arsaker_opphor_v2
 
 
