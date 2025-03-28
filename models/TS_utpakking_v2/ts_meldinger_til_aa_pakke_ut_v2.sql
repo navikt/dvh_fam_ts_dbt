@@ -26,7 +26,7 @@ with ts_meta_data as (
       (SELECT MAX(endret_tid) FROM {{ source('fam_ef', 'fam_ts_fagsak_v2') }}), 
       m.endret_tid - 1
     )*/
-  where (j.lovverkets_maalgruppe = 'ENSLIG_FORSØRGER' or j.vedtaks_resultat in ('AVSLÅTT', 'OPPHØRT'))
+  where (j.lovverkets_maalgruppe = 'ENSLIG_FORSØRGER' or j.vedtak_resultat in ('AVSLÅTT', 'OPPHØRT'))
     and endret_tid > sysdate - 30
     and m.ekstern_behandling_id not in
         (
