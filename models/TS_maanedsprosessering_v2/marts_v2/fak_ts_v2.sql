@@ -1,6 +1,7 @@
 {{
     config(
-        materialized = 'table'
+        materialized='incremental',
+        unique_key=['periode', 'gyldig_flagg']
     )
 }}
 
@@ -59,6 +60,7 @@ with fakta as (
 fakta_per_mottaker as (
     select
         periode
+       ,gyldig_flagg
        ,fk_person1 -- Mottaker
        ,fk_dim_person -- Mottaker
        ,siste_dato_i_perioden
