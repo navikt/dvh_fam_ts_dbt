@@ -98,5 +98,6 @@ ur_vedtaksperiode as (
     on dim_kjonn.pk_dim_kjonn = dim_person.fk_dim_kjonn
 )
 
-select *
-from ur_vedtaksperiode
+select a.*
+      ,localtimestamp as lastet_dato
+from ur_vedtaksperiode a

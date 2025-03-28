@@ -70,4 +70,5 @@ select
    ,case when alder_barn < 8 then 1 else 0 end bu8
    ,case when alder_barn < 10 then 1 else 0 end bu10
    ,case when alder_barn < 18 then 1 else 0 end bu18
+   ,localtimestamp as lastet_dato
 from barn_vedtaksperiode a
