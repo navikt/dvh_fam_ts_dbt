@@ -42,3 +42,4 @@ models:
 vars:
   # Input statistikk periode for månedsprosessering
   periode: 202501
+  gyldig_flagg: 0
