@@ -126,6 +126,6 @@ fakta_per_mottaker as (
 )
 
 -- Velg alle kolonner fra fakta_per_mottaker
-select *
+select a.*
       ,localtimestamp as lastet_dato
-from fakta_per_mottaker
+from fakta_per_mottaker a
