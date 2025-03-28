@@ -1,7 +1,8 @@
 {{
     config(
         materialized='incremental',
-        unique_key=['periode', 'gyldig_flagg']
+        unique_key=['periode', 'gyldig_flagg'],
+        incremental_strategy='delete+insert'
     )
 }}
 
