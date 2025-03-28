@@ -119,6 +119,7 @@ fakta_per_mottaker as (
        ,fodsels_aar
        ,fodsels_mnd
        ,alder
+    having sum(belop) > 0 --Ikke return mottaker som har 0 beløp i periode
 )
 
 -- Velg alle kolonner fra fakta_per_mottaker

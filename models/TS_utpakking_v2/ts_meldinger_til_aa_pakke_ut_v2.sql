@@ -20,12 +20,19 @@ with ts_meta_data as (
         )
       )
     ) j
-  WHERE 
+  /*WHERE 
     (j.lovverkets_maalgruppe = 'ENSLIG_FORSØRGER' OR j.vedtak_resultat = 'AVSLÅTT')
     AND m.endret_tid > NVL(
       (SELECT MAX(endret_tid) FROM {{ source('fam_ef', 'fam_ts_fagsak_v2') }}), 
       m.endret_tid - 1
-    )
+    )*/
+  where (j.lovverkets_maalgruppe = 'ENSLIG_FORSØRGER' or j.vedtaks_resultat in ('AVSLÅTT', 'OPPHØRT'))
+    and endret_tid > sysdate - 30
+    and m.ekstern_behandling_id not in
+        (
+            select ekstern_behandling_id
+            from {{ source('fam_ef', 'fam_ts_fagsak_v2') }}
+        )
 )
 
 SELECT 
