@@ -8,6 +8,7 @@
 with mottaker as (
     select  
         periode
+       ,gyldig_flagg
        ,fk_person1 -- Mottaker
        ,fk_dim_person -- Mottaker
        ,ekstern_behandling_id
@@ -19,6 +20,7 @@ with mottaker as (
     from {{ ref('ts_vedtaksperiode_mottaker_v2')}}
     group by
         periode
+       ,gyldig_flagg
        ,fk_person1 -- Mottaker
        ,fk_dim_person -- Mottaker
        ,ekstern_behandling_id
@@ -33,6 +35,7 @@ with mottaker as (
 barn_vedtaksperiode as (
     select
         mottaker.periode
+       ,mottaker.gyldig_flagg
        ,mottaker.fk_person1 -- Mottaker
        ,mottaker.fk_dim_person -- Mottaker
        ,mottaker.ekstern_behandling_id

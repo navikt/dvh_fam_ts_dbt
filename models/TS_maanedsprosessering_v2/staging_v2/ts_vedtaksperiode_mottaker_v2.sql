@@ -68,6 +68,7 @@ ur_vedtaksperiode as (
        ,floor(months_between(tid.siste_dato_i_perioden, dim_person.fodt_dato)/12) alder
        ,to_char(dim_person.fodt_dato,'yyyy') as fodsels_aar
        ,to_char(dim_person.fodt_dato,'mm') as fodsels_mnd
+       ,{{ var('gyldig_flagg') }} as gyldig_flagg
     from ur
 
     join tid
