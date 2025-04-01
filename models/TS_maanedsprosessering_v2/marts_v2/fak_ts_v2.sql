@@ -90,7 +90,7 @@ fakta_per_mottaker as (
        ,sum(case when stonadstype = 'LÆREMIDLER' and to_char(dato_utbet_fom, 'yyyymm') < periode then belop else 0 end) tsolmidler_etterbetalt
 
        ,sum(belop) total_belop
-       ,max(aktivitet) aaktivitet
+       ,max(aktivitet) aktivitet
        ,max(antall_barn) antall_barn
        ,max(lovverkets_maalgruppe) lovverkets_maalgruppe
        ,max(maalgruppe) maalgruppe
