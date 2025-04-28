@@ -24,7 +24,7 @@ select * from ts_meta_data,
         )
     )
   ) j
-  where json_value (melding, '$.arsaker_opphor.årsaker.size()' )> 0
+  --where json_value (melding, '$.arsaker_opphor.årsaker.size()' )> 0
 ),
 
 final as (
@@ -44,3 +44,4 @@ select
   ,ekstern_behandling_id
   ,localtimestamp AS LASTET_DATO
 from final
+where aarsak IS NOT NULL

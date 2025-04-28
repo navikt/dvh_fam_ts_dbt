@@ -29,7 +29,7 @@ select * from ts_meta_data,
       )
     )
   ) j
-  where json_value (melding, '$.vedtaksperioder.size()' )> 0
+  --where json_value (melding, '$.vedtaksperioder.size()' )> 0
 ),
 
 final as (
@@ -61,3 +61,4 @@ select
   ,ekstern_behandling_id
   ,localtimestamp AS LASTET_DATO
 from final
+where fra_og_med IS NOT NULL
