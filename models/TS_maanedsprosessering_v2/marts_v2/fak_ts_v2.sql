@@ -86,8 +86,8 @@ fakta_per_mottaker as (
        ,sum(case when stonadstype = 'BARNETILSYN' and to_char(dato_utbet_fom, 'yyyymm') = periode then belop else 0 end) tsotilbarn
        ,sum(case when stonadstype = 'BARNETILSYN' and to_char(dato_utbet_fom, 'yyyymm') < periode then belop else 0 end) tsotilbarn_etterbetalt
 
-       ,sum(case when stonadstype = 'LÆREMIDLER' and to_char(dato_utbet_fom, 'yyyymm') = periode then belop else 0 end) tsolmidler
-       ,sum(case when stonadstype = 'LÆREMIDLER' and to_char(dato_utbet_fom, 'yyyymm') < periode then belop else 0 end) tsolmidler_etterbetalt
+       ,sum(case when stonadstype = 'LÆREMIDLER' and to_char(dato_utbet_fom, 'yyyymm') <= periode then belop else 0 end) tsolmidler --tsolmidler = TSOMIDLER+TSOMIDLER_ETTERBETALT
+       --,sum(case when stonadstype = 'LÆREMIDLER' and to_char(dato_utbet_fom, 'yyyymm') < periode then belop else 0 end) tsolmidler_etterbetalt
 
        ,sum(belop) total_belop
        ,max(aktivitet) aktivitet
@@ -105,6 +105,9 @@ fakta_per_mottaker as (
        ,max(antbu8) antbu8
        ,max(antbu10) antbu10
        ,max(antbu18) antbu18
+       
+       ,sum(case when stonadstype = 'BOUTGIFTER' and to_char(dato_utbet_fom, 'yyyymm') = periode then belop else 0 end) boutgift_belop
+       ,sum(case when stonadstype = 'BOUTGIFTER' and to_char(dato_utbet_fom, 'yyyymm') < periode then belop else 0 end) boutgift_etterbetalt
     from fakta
     group by
         periode
